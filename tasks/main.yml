@@ -1,2 +1,9 @@
 ---
-# tasks file for dataverse-upgrade
+- name: "run database upgrade tasks for relevant versions"
+  include: "increment_database.yml"
+  vars:
+    version: "{{ item.version }}"
+    query:    "{{ item.query | default('') }}"
+    checksum: "{{ item.checksum | default(omit) }}"
+  when: dvu_current_version is version_compare(item.version, '<') and dvu_target_version is version_compare(item.version, '>=')
+  with_items: "{{ dvu_versions }}"
