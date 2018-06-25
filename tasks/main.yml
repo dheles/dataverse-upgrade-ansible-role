@@ -7,3 +7,6 @@
     checksum: "{{ item.checksum | default(omit) }}"
   when: dvu_current_version is version_compare(item.version, '<') and dvu_target_version is version_compare(item.version, '>=')
   with_items: "{{ dvu_versions }}"
+
+- name: run post-upgrade steps
+  include: post_upgrade.yml
