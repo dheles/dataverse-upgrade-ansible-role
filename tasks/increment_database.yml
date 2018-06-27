@@ -10,7 +10,7 @@
       url: "{{ dvu_releases_url }}/v{{ version }}/{{ query }}"
       dest: "{{ dvu_working_dir }}"
 
-  - name: run query
+  - name: run {{ version }} query
     command: "psql -U {{ dvu_dbuser }} -d {{ dvu_dbname }} -f {{ query }}"
     args:
       chdir: "{{ dvu_working_dir }}"

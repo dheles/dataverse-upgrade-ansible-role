@@ -1,12 +1,13 @@
 ---
-- name: "run database upgrade tasks for relevant versions"
-  include: "increment_database.yml"
+- name: "run upgrade tasks for relevant versions"
+  include: "upgrade_tasks.yml"
   vars:
-    version: "{{ item.version }}"
-    query:    "{{ item.query | default('') }}"
+    tasks_version:  "{{ item.version }}"
+    tasks_query:    "{{ item.query | default('') }}"
+    tasks:    "{{ item.tasks | default(false) }}"
     checksum: "{{ item.checksum | default(omit) }}"
   when: dvu_current_version is version_compare(item.version, '<') and dvu_target_version is version_compare(item.version, '>=')
   with_items: "{{ dvu_versions }}"
 
-- name: run post-upgrade steps
+- name: run post-upgrade tasks
   include: post_upgrade.yml
