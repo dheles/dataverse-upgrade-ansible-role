@@ -1,0 +1,40 @@
+---
+# curl -X PUT -d 'true' http://localhost:8080/api/admin/settings/:ProvCollectionEnabled
+- name: (Optionally) Enable Provenance
+  uri:
+    url: "{{ dataverse.api.location }}/admin/settings/:ProvCollectionEnabled"
+    method: PUT
+    body: "{{ dvu_provenance_enabled | string }}"
+  when: dvu_provenance_enabled
+
+- name: "download metadata languages list"
+  get_url:
+    url: "{{ dvu_releases_url }}/v{{ version }}/citation.tsv"
+    dest: "{{ dvu_working_dir }}"
+    checksum: "sha1:0b3eaf9c1de72dd9f04bf5c9d51c290f7485f94f"
+
+# curl http://localhost:8080/api/admin/datasetfield/load -X POST --data-binary @citation.tsv -H "Content-type: text/tab-separated-values"
+# NOTE: uri module should receive ability to POST binary files in ansible version ~2.6
+# https://github.com/ansible/ansible/pull/33689
+# - name: Update metadata languages list
+#   uri:
+#     url: "{{ dataverse.api.location }}/admin/datasetfield/load"
+#     method: POST
+#     src: "{{ dvu_working_dir }}/citation.tsv"
+#     headers:
+#       Content-Type: "text/tab-separated-values"
+
+- name: Update metadata languages list
+  command: >
+    curl "{{ dataverse.api.location }}/admin/datasetfield/load"
+    -X POST
+    --data-binary @citation.tsv
+    -H "Content-type: text/tab-separated-values"
+  register: result
+  failed_when: "'OK' not in result.stdout"
+
+# TODO: Run the retroactive file PID registration script or register all file PID endpoint
+# https://github.com/IQSS/dataverse/releases/tag/v4.9
+# NOTE: this may need to be a manual, rather than an automated process
+# if the provider is not fault-tolerant and supportive of the possibility of
+# the job being re-run, as it appears to be a one-time operation

@@ -9,7 +9,6 @@ dvu_versions:
   query:    "upgrade_v4.6.1_to_v4.6.2.sql"
 - version:  "4.7"
   query:    "upgrade_v4.6.2_to_v4.7.sql"
-  task:     true
 - version:  "4.7.1"
   query:    "upgrade_v4.7_to_v4.7.1.sql"
 - version:  "4.8"
@@ -24,8 +23,10 @@ dvu_versions:
   query:    "upgrade_v4.8.5_to_v4.8.6.sql"
 - version:  "4.9"
   query:    "upgrade_v4.8.6_to_v4.9.0.sql"
+  tasks:    true
 dvu_releases_url: "https://github.com/IQSS/dataverse/releases/download"
 dvu_working_dir:  "/home/{{ ansible_user }}"
 dvu_dbname:       "{{ dataverse.db }}"
 dvu_dbuser:       "{{ dataverse.dbuser }}"
 dvu_api_location: "{{ dataverse.api.location }}"
+dvu_provenance_enabled: true
