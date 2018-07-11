@@ -1,0 +1,26 @@
+---
+- name: "download citations metadata block file"
+  get_url:
+    url: "{{ dvu_releases_url }}/v{{ version }}/{{ file }}"
+    dest: "{{ dvu_working_dir }}"
+    checksum: "{{ checksum }}"
+
+# curl http://localhost:8080/api/admin/datasetfield/load -X POST --data-binary @citation.tsv -H "Content-type: text/tab-separated-values"
+# NOTE: uri module should receive ability to POST binary files in ansible version ~2.6
+# https://github.com/ansible/ansible/pull/33689
+# - name: Update metadata languages list
+#   uri:
+#     url: "{{ dataverse.api.location }}/admin/datasetfield/load"
+#     method: POST
+#     src: "{{ dvu_working_dir }}/{{ file }}"
+#     headers:
+#       Content-Type: "text/tab-separated-values"
+
+- name: Update citations metadata
+  command: >
+    curl "{{ dataverse.api.location }}/admin/datasetfield/load"
+    -X POST
+    --data-binary @{{ file }}
+    -H "Content-type: text/tab-separated-values"
+  register: result
+  failed_when: "'OK' not in result.stdout"

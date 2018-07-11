@@ -10,6 +10,14 @@
     query:    "{{ tasks_query | default('') }}"
     checksum: "{{ checksum | default(omit) }}"
 
+- name: "update metadata for {{ tasks_version }}"
+  include: "update_metadata.yml"
+  vars:
+    version: "{{ tasks_version }}"
+    file: "{{ metadata_file | default('') }}"
+    checksum: "{{ metadata_checksum | default('') }}"
+  when: metadata_file != ''
+
 - name: "run additional upgrade tasks for {{ tasks_version }}"
   include: "{{ tasks_version }}.yml"
   vars:
