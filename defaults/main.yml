@@ -4,29 +4,38 @@ dvu_target_version:   "4.9"
 dvu_versions:
 - version:            "4.6"
 - version:            "4.6.1"
-  query:              "upgrade_v4.6_to_v4.6.1.sql"
+  queries:
+  - "upgrade_v4.6_to_v4.6.1.sql"
 - version:            "4.6.2"
-  query:              "upgrade_v4.6.1_to_v4.6.2.sql"
+  queries:
+  - "upgrade_v4.6.1_to_v4.6.2.sql"
   metadata_file:      "citation.tsv"
   metadata_checksum:  "sha1:98824ae60e149bac14d2bd402ce5f5108dd8fad8"
 - version:            "4.7"
-  query:              "upgrade_v4.6.2_to_v4.7.sql"
+  queries:
+  - "upgrade_v4.6.2_to_v4.7.sql"
 - version:            "4.7.1"
-  query:              "upgrade_v4.7_to_v4.7.1.sql"
+  queries:
+  - "upgrade_v4.7_to_v4.7.1.sql"
 - version:            "4.8"
-  query:              "upgrade_v4.7.1_to_v4.8.sql"
+  queries:
+  - "upgrade_v4.7.1_to_v4.8.sql"
+  - "3561-update.sql"
   metadata_file:      "citation.tsv"
   metadata_checksum:  "sha1:842888d4c09b0ff21c4571f34d56cba8441d14ec"
 - version:            "4.8.1"
 - version:            "4.8.2"
 - version:            "4.8.3"
 - version:            "4.8.4"
-  query:              "upgrade_v4.8.3_to_v4.8.4.sql"
+  queries:
+  - "upgrade_v4.8.3_to_v4.8.4.sql"
 - version:            "4.8.5"
 - version:            "4.8.6"
-  query:              "upgrade_v4.8.5_to_v4.8.6.sql"
+  queries:
+  - "upgrade_v4.8.5_to_v4.8.6.sql"
 - version:            "4.9"
-  query:              "upgrade_v4.8.6_to_v4.9.0.sql"
+  queries:
+  - "upgrade_v4.8.6_to_v4.9.0.sql"
   metadata_file:      "citation.tsv"
   metadata_checksum:  "sha1:0b3eaf9c1de72dd9f04bf5c9d51c290f7485f94f"
   tasks:              true

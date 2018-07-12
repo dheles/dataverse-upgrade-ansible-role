@@ -3,7 +3,7 @@
   include: "upgrade_tasks.yml"
   vars:
     tasks_version:  "{{ item.version }}"
-    tasks_query:    "{{ item.query | default('') }}"
+    tasks_queries:  "{{ item.queries | default('') }}"
     tasks:    "{{ item.tasks | default(false) }}"
     checksum: "{{ item.checksum | default(omit) }}"
     metadata_file:      "{{ item.metadata_file | default('') }}"

@@ -2,15 +2,14 @@
 # vars:
 # - version
 # - query
-# - [checksum]
 - name: increment database, if query exists
   block:
-  - name: "download {{ version }} query"
+  - name: "download {{ query }}"
     get_url:
       url: "{{ dvu_releases_url }}/v{{ version }}/{{ query }}"
       dest: "{{ dvu_working_dir }}"
 
-  - name: run {{ version }} query
+  - name: run {{ query }}
     command: "psql -U {{ dvu_dbuser }} -d {{ dvu_dbname }} -f {{ query }}"
     args:
       chdir: "{{ dvu_working_dir }}"

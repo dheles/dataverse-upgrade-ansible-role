@@ -7,8 +7,11 @@
   include: "increment_database.yml"
   vars:
     version: "{{ tasks_version }}"
-    query:    "{{ tasks_query | default('') }}"
-    checksum: "{{ checksum | default(omit) }}"
+    query:    "{{ tasks_query }}"
+  with_items:
+  - "{{ tasks_queries }}"
+  loop_control:
+    loop_var: tasks_query
 
 - name: "update metadata for {{ tasks_version }}"
   include: "update_metadata.yml"
