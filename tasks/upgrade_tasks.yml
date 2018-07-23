@@ -2,7 +2,8 @@
 # vars:
 # - version
 # - query
-# - [checksum]
+
+# LeSoN
 - name: "run database upgrade tasks for relevant versions"
   include: "increment_database.yml"
   vars:
@@ -12,15 +13,7 @@
   - "{{ tasks_queries }}"
   loop_control:
     loop_var: tasks_query
-
-- name: "update metadata for {{ tasks_version }}"
-  include: "update_metadata.yml"
-  vars:
-    version: "{{ tasks_version }}"
-    file: "{{ metadata_file | default('') }}"
-    checksum: "{{ metadata_checksum | default('') }}"
-  when: metadata_file != ''
-
+    
 - name: "run additional upgrade tasks for {{ tasks_version }}"
   include: "{{ tasks_version }}.yml"
   vars:
