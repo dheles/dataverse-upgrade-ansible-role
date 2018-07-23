@@ -39,6 +39,7 @@ dvu_versions:
   metadata_file:      "citation.tsv"
   metadata_checksum:  "sha1:0b3eaf9c1de72dd9f04bf5c9d51c290f7485f94f"
   tasks:              true
+- version:            "4.9.1"
 dvu_releases_url: "https://github.com/IQSS/dataverse/releases/download"
 dvu_working_dir:  "/home/{{ ansible_user }}"
 dvu_dbname:       "{{ dataverse.db }}"
