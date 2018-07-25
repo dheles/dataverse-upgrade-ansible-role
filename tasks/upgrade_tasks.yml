@@ -3,6 +3,11 @@
 # - version
 # - query
 
+- name: "deploy dataverse {{ tasks_version }}"
+  include: "update_war.yml"
+  vars:
+    version: "{{ tasks_version }}"
+
 # LeSoN
 - name: "run database upgrade tasks for relevant versions"
   include: "increment_database.yml"

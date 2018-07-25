@@ -1,0 +1,47 @@
+---
+- name: "download dataverse {{ version }}"
+  get_url:
+    url: "{{ dvu_releases_url }}/v{{ version }}/dataverse-{{ version }}.war"
+    dest: "{{ dvu_working_dir }}"
+
+# TODO: Shut down access to production service, you do not want users interacting with site during upgrade.
+
+# <glassfish install path>/glassfish4/bin/asadmin list-applications
+
+- name: undeploy the previous version
+  become: true
+  become_user: "{{ dvu_glassfish_user }}"
+  shell: "nohup {{ dvu_glassfish_root }}/bin/asadmin undeploy dataverse"
+  failed_when: false
+
+- name: stop glassfish
+  command: "echo 'stopping glassfish to upgrade dataverse'"
+  changed_when: true
+  notify: stop glassfish
+
+- name: flush handlers to invoke stop
+  meta: flush_handlers
+
+- name: remove the generated directory
+  become: true
+  become_user: "{{ dvu_glassfish_user }}"
+  file:
+    path: "{{ dvu_glassfish_root }}/glassfish/domains/domain1/generated"
+    state: absent
+
+- name: start glassfish
+  command: "echo 'starting glassfish to upgrade dataverse'"
+  changed_when: true
+  notify: start glassfish
+
+- name: flush handlers to invoke start
+  meta: flush_handlers
+
+# Install and configure Solr v7.3
+# See http://guides.dataverse.org/en/4.9/installation/prerequisites.html#installing-solr
+
+- name: "deploy dataverse {{ version }}"
+  become: true
+  become_user: "{{ dvu_glassfish_user }}"
+  shell: "nohup {{ dvu_glassfish_root }}/bin/asadmin deploy --name dataverse --force {{ dvu_working_dir }}/dataverse-{{ version }}.war"
+  failed_when: false # ignore numerous database errors as deployment tries to re-create many existing db objects

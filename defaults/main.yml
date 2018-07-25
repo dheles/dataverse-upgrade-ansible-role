@@ -45,4 +45,6 @@ dvu_working_dir:  "/home/{{ ansible_user }}"
 dvu_dbname:       "{{ dataverse.db }}"
 dvu_dbuser:       "{{ dataverse.dbuser }}"
 dvu_api_location: "{{ dataverse.api.location }}"
+dvu_glassfish_root: "{{ dataverse.glassfish.root }}"
+dvu_glassfish_user: "{{ dataverse.glassfish.user }}"
 dvu_provenance_enabled: true
