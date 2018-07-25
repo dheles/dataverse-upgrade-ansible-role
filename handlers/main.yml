@@ -1,2 +1,18 @@
 ---
-# handlers file for dataverse-upgrade
+- name: stop glassfish
+  service:
+    name: glassfish
+    state: stopped
+  become: true
+
+- name: start glassfish
+  service:
+    name: glassfish
+    state: started
+  become: true
+
+- name: restart glassfish
+  service:
+    name: glassfish
+    state: restarted
+  become: true
