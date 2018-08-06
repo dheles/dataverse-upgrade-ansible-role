@@ -1,0 +1,10 @@
+---
+- name: Reindex to update doi link format in citation
+  command: "echo 'reindexing to upgrade dataverse'"
+  changed_when: true
+  notify: reindex solr
+
+- name: Reexport all to update doi link format in citation
+  command: "echo 'reexporting metadata to upgrade dataverse'"
+  changed_when: true
+  notify: reexport metadata
