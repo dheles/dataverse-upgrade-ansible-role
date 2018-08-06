@@ -1,18 +1,25 @@
 ---
-- name: stop glassfish
-  service:
-    name: glassfish
-    state: stopped
-  become: true
+- name: clear existing index
+  uri:
+    url: "{{ dvu_api_location }}/admin/index/clear"
+  listen: reindex solr
 
-- name: start glassfish
-  service:
-    name: glassfish
-    state: started
-  become: true
+- name: reindex
+  uri:
+    url: "{{ dvu_api_location }}/admin/index"
+  listen: reindex solr
 
-- name: restart glassfish
-  service:
-    name: glassfish
-    state: restarted
-  become: true
+- name: clear index timestamps
+  uri:
+    url: "{{ dvu_api_location }}/admin/index/timestamps"
+    method: "DELETE"
+  listen: reindex solr in place
+
+- name: reindex in place
+  uri:
+    url: "{{ dvu_api_location }}/admin/index/continue"
+  listen: reindex solr in place
+
+- name: reexport metadata
+  uri:
+    url: "{{ dvu_api_location }}/admin/metadata/reExportAll"

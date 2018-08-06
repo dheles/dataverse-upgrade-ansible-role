@@ -1,11 +1,9 @@
 ---
-- name: restart server
-  command: "echo 'restarting glassfish after upgrading dataverse'"
-  changed_when: true
-  notify: restart glassfish
-
-- name: flush handlers to invoke restart
-  meta: flush_handlers
+- name: restart glassfish
+  service:
+    name: glassfish
+    state: restarted
+  become: true
 
 - name: reindex
   block:

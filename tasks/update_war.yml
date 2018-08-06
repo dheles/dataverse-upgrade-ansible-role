@@ -15,12 +15,10 @@
   failed_when: false
 
 - name: stop glassfish
-  command: "echo 'stopping glassfish to upgrade dataverse'"
-  changed_when: true
-  notify: stop glassfish
-
-- name: flush handlers to invoke stop
-  meta: flush_handlers
+  service:
+    name: glassfish
+    state: stopped
+  become: true
 
 - name: remove the generated directory
   become: true
@@ -30,12 +28,10 @@
     state: absent
 
 - name: start glassfish
-  command: "echo 'starting glassfish to upgrade dataverse'"
-  changed_when: true
-  notify: start glassfish
-
-- name: flush handlers to invoke start
-  meta: flush_handlers
+  service:
+    name: glassfish
+    state: started
+  become: true
 
 # Install and configure Solr v7.3
 # See http://guides.dataverse.org/en/4.9/installation/prerequisites.html#installing-solr
