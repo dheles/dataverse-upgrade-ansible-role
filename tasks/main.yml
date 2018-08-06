@@ -5,20 +5,10 @@
     tasks_version:  "{{ item.version }}"
     tasks_queries:  "{{ item.queries | default([]) }}"
     tasks:    "{{ item.tasks | default(false) }}"
-    checksum: "{{ item.checksum | default(omit) }}"
-    metadata_file:      "{{ item.metadata_file | default('') }}"
-    metadata_checksum:  "{{ item.metadata_checksum | default('') }}"
+    tasks_metadata: "{{ item.metadata | default([]) }}"
   when: dvu_current_version is version_compare(item.version, '<') and dvu_target_version is version_compare(item.version, '>=')
-  with_items: "{{ dvu_versions }}"
+  with_items: "{{ dvu_versions | union(dvu_versions_extra) }}"
 
-- name: "update metadata for {{ item.version }}"
-  include: "update_metadata.yml"
-  vars:
-    version: "{{ item.version }}"
-    file: "{{ item.metadata_file | default('') }}"
-    checksum: "{{ item.metadata_checksum | default('') }}"
-  when: item.metadata_file is defined and item.metadata_file != '' # and dvu_target_version is version_compare(item.version, '==')
-  with_items: "{{ dvu_versions }}"
 
 - name: run post-upgrade tasks
   include: post_upgrade.yml

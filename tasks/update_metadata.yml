@@ -1,9 +1,23 @@
 ---
-- name: "download citations metadata block file"
+# vars:
+# - version
+# - file
+# - [checksum]
+# - [url]
+
+# TODO: alternately handle stored files
+
+- set_fact:
+    metadata_url: "{{ url }}"
+- set_fact:
+    metadata_url: "{{ dvu_releases_url }}/v{{ version }}"
+  when: url == ''
+
+- name: "download metadata block file"
   get_url:
-    url: "{{ dvu_releases_url }}/v{{ version }}/{{ file }}"
+    url: "{{ metadata_url }}/{{ file }}"
     dest: "{{ dvu_working_dir }}"
-    checksum: "{{ checksum }}"
+    checksum: "{{ checksum | default(omit) }}"
 
 # curl http://localhost:8080/api/admin/datasetfield/load -X POST --data-binary @citation.tsv -H "Content-type: text/tab-separated-values"
 # NOTE: uri module should receive ability to POST binary files in ansible version ~2.6
@@ -16,7 +30,7 @@
 #     headers:
 #       Content-Type: "text/tab-separated-values"
 
-- name: Update citations metadata
+- name: update metadata
   command: >
     curl "{{ dataverse.api.location }}/admin/datasetfield/load"
     -X POST

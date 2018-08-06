@@ -17,7 +17,19 @@
   with_items: "{{ tasks_queries }}"
   loop_control:
     loop_var: tasks_query
-    
+
+# LeSoN: default(omit) - module var vs default('') - conditional
+- name: "update metadata for {{ tasks_version }}"
+  include: "update_metadata.yml"
+  vars:
+    version:  "{{ tasks_version }}"
+    file:     "{{ metadata.file }}"
+    checksum: "{{ metadata.checksum | default(omit) }}"
+    url:      "{{ metadata.url | default('') }}"
+  with_items: "{{ tasks_metadata }}"
+  loop_control:
+    loop_var: metadata
+
 - name: "run additional upgrade tasks for {{ tasks_version }}"
   include: "{{ tasks_version }}.yml"
   vars:

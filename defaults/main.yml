@@ -9,8 +9,9 @@ dvu_versions:
 - version:            "4.6.2"
   queries:
   - "upgrade_v4.6.1_to_v4.6.2.sql"
-  metadata_file:      "citation.tsv"
-  metadata_checksum:  "sha1:98824ae60e149bac14d2bd402ce5f5108dd8fad8"
+  metadata:
+  - file:     "citation.tsv"
+    checksum: "sha1:98824ae60e149bac14d2bd402ce5f5108dd8fad8"
 - version:            "4.7"
   queries:
   - "upgrade_v4.6.2_to_v4.7.sql"
@@ -21,8 +22,9 @@ dvu_versions:
   queries:
   - "upgrade_v4.7.1_to_v4.8.sql"
   - "3561-update.sql"
-  metadata_file:      "citation.tsv"
-  metadata_checksum:  "sha1:842888d4c09b0ff21c4571f34d56cba8441d14ec"
+  metadata:
+  - file:     "citation.tsv"
+    checksum: "sha1:842888d4c09b0ff21c4571f34d56cba8441d14ec"
 - version:            "4.8.1"
 - version:            "4.8.2"
 - version:            "4.8.3"
@@ -36,10 +38,12 @@ dvu_versions:
 - version:            "4.9"
   queries:
   - "upgrade_v4.8.6_to_v4.9.0.sql"
-  metadata_file:      "citation.tsv"
-  metadata_checksum:  "sha1:0b3eaf9c1de72dd9f04bf5c9d51c290f7485f94f"
+  metadata:
+  - file:     "citation.tsv"
+    checksum: "sha1:0b3eaf9c1de72dd9f04bf5c9d51c290f7485f94f"
   tasks:              true
 - version:            "4.9.1"
+dvu_versions_extra: []
 dvu_releases_url: "https://github.com/IQSS/dataverse/releases/download"
 dvu_working_dir:  "/home/{{ ansible_user }}"
 dvu_dbname:       "{{ dataverse.db }}"
