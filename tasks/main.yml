@@ -9,6 +9,8 @@
   when: dvu_current_version is version_compare(item.version, '<') and dvu_target_version is version_compare(item.version, '>=')
   with_items: "{{ dvu_versions | union(dvu_versions_extra) }}"
 
+- name: add custom metadata to solr
+  include: solrize_metadata.yml
 
 - name: run post-upgrade tasks
   include: post_upgrade.yml
