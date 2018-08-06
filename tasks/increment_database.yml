@@ -2,7 +2,7 @@
 # vars:
 # - version
 # - query
-- name: increment database, if query exists
+- name: increment database
   block:
   - name: "download {{ query }}"
     get_url:
@@ -13,5 +13,3 @@
     command: "psql -U {{ dvu_dbuser }} -d {{ dvu_dbname }} -f {{ query }}"
     args:
       chdir: "{{ dvu_working_dir }}"
-
-  when: query != ''

@@ -14,8 +14,7 @@
   vars:
     version: "{{ tasks_version }}"
     query:    "{{ tasks_query }}"
-  with_items:
-  - "{{ tasks_queries }}"
+  with_items: "{{ tasks_queries }}"
   loop_control:
     loop_var: tasks_query
     
