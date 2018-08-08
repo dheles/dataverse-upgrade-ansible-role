@@ -7,7 +7,16 @@
     tasks:    "{{ item.tasks | default(false) }}"
     tasks_metadata: "{{ item.metadata | default([]) }}"
   when: dvu_current_version is version_compare(item.version, '<') and dvu_target_version is version_compare(item.version, '>=')
-  with_items: "{{ dvu_versions | union(dvu_versions_extra) }}"
+  with_items: "{{ dvu_versions }}"
+
+- name: update custom metadata
+  include: update_metadata.yml
+  vars:
+    file:     "{{ item.file }}"
+    checksum: "{{ item.checksum | default(omit) }}"
+    url:      "{{ item.url | default('') }}"
+    local:    "{{ item.local | default(false) }}"
+  with_items: "{{ dvu_extra_metadata }}"
 
 - name: add custom metadata to solr
   include: solrize_metadata.yml

@@ -8,7 +8,7 @@
   vars:
     version: "{{ tasks_version }}"
 
-# LeSoN
+# LeSoN: loop control & loop var
 - name: "run database upgrade tasks for relevant versions"
   include: "increment_database.yml"
   vars:
@@ -26,6 +26,7 @@
     file:     "{{ metadata.file }}"
     checksum: "{{ metadata.checksum | default(omit) }}"
     url:      "{{ metadata.url | default('') }}"
+    local:    "{{ metadata.local | default(false) }}"
   with_items: "{{ tasks_metadata }}"
   loop_control:
     loop_var: metadata
