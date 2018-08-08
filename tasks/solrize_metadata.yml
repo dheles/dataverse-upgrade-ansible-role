@@ -4,12 +4,17 @@
 # Parse the metadata blocks to create Solr <fields> and <copyfields>
 ######################################################################
 
+# NOTE: we are relying on the fact that the update_metadata task has already
+# put the metadata files into the working directory
+# LeSoN: the when statement here avoids running the script against metadata items
+# configured to not be indexed. however, they are still included in the registered
+# variable. therefore, we still need to filter them out, using the selectattr
+# filter below
 - name: parse metadata blocks (mdblocks) to get Solr copyFields
-  local_action: "shell {{ role_path }}/scripts/mdblock_parser.py -c {{ instance_mdblocks_dir }}/{{ item }}.tsv"
+  script: "scripts/mdblock_parser.py -c {{ dvu_working_dir }}/{{ item.file }}"
   register: copyFields
-  run_once: true
-  become: false
-  with_items: "{{ instance_md_blocks }}"
+  when: item.index
+  with_items: "{{ dvu_extra_metadata }}"
 
 - name: add metadata <copyfield>s to Dataverse's Solr schema.xml
   blockinfile:
@@ -17,16 +22,15 @@
     state: present
     insertbefore: "Dataverse Specific"
     marker: "<!-- {mark} Dataverse copyfield MANAGED BLOCK -->"
-    content: "{{ copyFields.results | map(attribute='stdout') | list | join('\n') }}"
+    content: "{{ copyFields.results | selectattr('item.index') | map(attribute='stdout') | list | join('\n') }}"
   become: true
   notify: reindex solr
 
 - name: parse metadata blocks (mdblocks) for Solr fields
-  local_action: "shell {{ role_path }}/scripts/mdblock_parser.py -f {{ instance_mdblocks_dir }}/{{ item }}.tsv"
+  script: "scripts/mdblock_parser.py -f {{ dvu_working_dir }}/{{ item.file }}"
   register: fields
-  run_once: true
-  become: false
-  with_items: "{{ instance_md_blocks }}"
+  when: item.index
+  with_items: "{{ dvu_extra_metadata }}"
 
 - name: add metadata <field>s to Dataverse's Solr schema.xml
   blockinfile:
@@ -34,7 +38,7 @@
     state: present
     insertafter: "^\\s*<field name=[^>]*>"
     marker: "<!-- {mark} Dataverse field MANAGED BLOCK -->"
-    content: "{{ fields.results | map(attribute='stdout') | list | join('\n') }}"
+    content: "{{ fields.results | selectattr('item.index') | map(attribute='stdout') | list | join('\n') }}"
   become: true
   notify: reindex solr
 

@@ -5,19 +5,26 @@
 # - [checksum]
 # - [url]
 
-# TODO: alternately handle stored files
+- name: download remote files
+  block:
+  - set_fact:
+      metadata_url: "{{ url }}"
+  - set_fact:
+      metadata_url: "{{ dvu_releases_url }}/v{{ version }}"
+    when: url == ''
 
-- set_fact:
-    metadata_url: "{{ url }}"
-- set_fact:
-    metadata_url: "{{ dvu_releases_url }}/v{{ version }}"
-  when: url == ''
+  - name: "download metadata block file"
+    get_url:
+      url: "{{ metadata_url }}/{{ file }}"
+      dest: "{{ dvu_working_dir }}"
+      checksum: "{{ checksum | default(omit) }}"
+  when: not local
 
-- name: "download metadata block file"
-  get_url:
-    url: "{{ metadata_url }}/{{ file }}"
+- name: copy local files
+  copy:
+    src: "{{ dvu_extra_metadata_dir }}/{{ file }}"
     dest: "{{ dvu_working_dir }}"
-    checksum: "{{ checksum | default(omit) }}"
+  when: local
 
 # curl http://localhost:8080/api/admin/datasetfield/load -X POST --data-binary @citation.tsv -H "Content-type: text/tab-separated-values"
 # NOTE: uri module should receive ability to POST binary files in ansible version ~2.6
