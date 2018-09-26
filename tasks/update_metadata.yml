@@ -26,12 +26,16 @@
     dest: "{{ dvu_working_dir }}"
   when: local
 
+- name: wait for api before using
+  wait_for:
+    port: "{{ dvu_api_port }}"
+
 # curl http://localhost:8080/api/admin/datasetfield/load -X POST --data-binary @citation.tsv -H "Content-type: text/tab-separated-values"
 # NOTE: uri module should receive ability to POST binary files in ansible version ~2.6
 # https://github.com/ansible/ansible/pull/33689
 # - name: Update metadata languages list
 #   uri:
-#     url: "{{ dataverse.api.location }}/admin/datasetfield/load"
+#     url: "{{ dvu_api_location }}/admin/datasetfield/load"
 #     method: POST
 #     src: "{{ dvu_working_dir }}/{{ file }}"
 #     headers:
@@ -39,7 +43,7 @@
 
 - name: update metadata
   command: >
-    curl "{{ dataverse.api.location }}/admin/datasetfield/load"
+    curl "{{ dvu_api_location }}/admin/datasetfield/load"
     -X POST
     --data-binary @{{ file }}
     -H "Content-type: text/tab-separated-values"

@@ -5,13 +5,13 @@
     state: restarted
   become: true
 
-- name: reindex
-  block:
-    # curl http://localhost:8080/api/admin/index/clear
-    # curl http://localhost:8080/api/admin/index
-  - name: clear existing index
-    uri:
-      url: "{{ dvu_api_location }}/admin/index/clear"
-  - name: reindex
-    uri:
-      url: "{{ dvu_api_location }}/admin/index"
+# - name: reindex
+#   block:
+#     # curl http://localhost:8080/api/admin/index/clear
+#     # curl http://localhost:8080/api/admin/index
+#   - name: clear existing index
+#     uri:
+#       url: "{{ dvu_api_location }}/admin/index/clear"
+#   - name: reindex
+#     uri:
+#       url: "{{ dvu_api_location }}/admin/index"
