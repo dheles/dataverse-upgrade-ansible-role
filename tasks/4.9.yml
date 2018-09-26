@@ -6,7 +6,7 @@
 # curl -X PUT -d 'true' http://localhost:8080/api/admin/settings/:ProvCollectionEnabled
 - name: (Optionally) Enable Provenance
   uri:
-    url: "{{ dataverse.api.location }}/admin/settings/:ProvCollectionEnabled"
+    url: "{{ dvu_api_location }}/admin/settings/:ProvCollectionEnabled"
     method: PUT
     body: "{{ dvu_provenance_enabled | string }}"
   when: dvu_provenance_enabled
