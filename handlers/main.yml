@@ -1,4 +1,11 @@
 ---
+- name: wait for api before using
+  wait_for:
+    port: "{{ dvu_api_port }}"
+  listen:
+  - reindex solr
+  - reindex solr in place
+
 - name: clear existing index
   uri:
     url: "{{ dvu_api_location }}/admin/index/clear"
