@@ -35,7 +35,7 @@
 # https://github.com/ansible/ansible/pull/33689
 # - name: Update metadata languages list
 #   uri:
-#     url: "{{ dataverse.api.location }}/admin/datasetfield/load"
+#     url: "{{ dvu_api_location }}/admin/datasetfield/load"
 #     method: POST
 #     src: "{{ dvu_working_dir }}/{{ file }}"
 #     headers:
@@ -43,7 +43,7 @@
 
 - name: update metadata
   command: >
-    curl "{{ dataverse.api.location }}/admin/datasetfield/load"
+    curl "{{ dvu_api_location }}/admin/datasetfield/load"
     -X POST
     --data-binary @{{ file }}
     -H "Content-type: text/tab-separated-values"
