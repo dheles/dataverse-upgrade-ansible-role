@@ -30,3 +30,4 @@
 - name: reexport metadata
   uri:
     url: "{{ dvu_api_location }}/admin/metadata/reExportAll"
+    status_code: 200, 202
