@@ -1,0 +1,32 @@
+---
+# vars:
+# - version
+# - file
+# - [checksum]
+# - [url]
+
+- name: download remote files
+  block:
+  - set_fact:
+      solr_url: "{{ url }}"
+  - set_fact:
+      solr_url: "{{ dvu_releases_url }}/v{{ version }}"
+    when: url == ''
+
+  - name: "download solr file"
+    get_url:
+      url: "{{ solr_url }}/{{ file }}"
+      dest: "{{ dvu_working_dir }}"
+      checksum: "{{ checksum | default(omit) }}"
+
+- name: wait for api before using
+  wait_for:
+    port: "{{ dvu_api_port }}"
+
+- name: "deploy {{  file }} to Dataverse's Solr"
+  copy:
+    src:  "{{ file }}"
+    dest: "{{ dvu_solr_config_dir }}/{{ file }}"
+    remote_src: true
+  become: true
+  notify: reindex solr

@@ -18,6 +18,17 @@
   loop_control:
     loop_var: tasks_query
 
+- name: "update solr for {{ tasks_version }}"
+  include: "update_solr.yml"
+  vars:
+    version:  "{{ tasks_version }}"
+    file:     "{{ solr.file }}"
+    checksum: "{{ solr.checksum | default(omit) }}"
+    url:      "{{ solr.url | default('') }}"
+  with_items: "{{ tasks_solr }}"
+  loop_control:
+    loop_var: solr
+
 # LeSoN: default(omit) - module var vs default('') - conditional
 - name: "update metadata for {{ tasks_version }}"
   include: "update_metadata.yml"

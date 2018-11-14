@@ -4,7 +4,8 @@
   vars:
     tasks_version:  "{{ item.version }}"
     tasks_queries:  "{{ item.queries | default([]) }}"
-    tasks:    "{{ item.tasks | default(false) }}"
+    tasks:          "{{ item.tasks | default(false) }}"
+    tasks_solr:     "{{ item.solr | default([]) }}"
     tasks_metadata: "{{ item.metadata | default([]) }}"
   when: dvu_current_version is version_compare(item.version, '<') and dvu_target_version is version_compare(item.version, '>=')
   with_items: "{{ dvu_versions }}"
