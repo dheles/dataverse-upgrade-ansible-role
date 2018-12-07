@@ -12,7 +12,8 @@
   become: true
   become_user: "{{ dvu_glassfish_user }}"
   shell: "nohup {{ dvu_glassfish_root }}/bin/asadmin undeploy dataverse"
-  failed_when: false
+  register: undeploy_result
+  failed_when: "undeploy_result.rc != 0 and 'Application dataverse is not deployed' not in undeploy_result.stderr"
 
 - name: stop glassfish
   service:
@@ -40,4 +41,5 @@
   become: true
   become_user: "{{ dvu_glassfish_user }}"
   shell: "nohup {{ dvu_glassfish_root }}/bin/asadmin deploy --name dataverse --force {{ dvu_working_dir }}/dataverse-{{ version }}.war"
-  failed_when: false # ignore numerous database errors as deployment tries to re-create many existing db objects
+  register: deploy_result
+  failed_when: "deploy_result.rc != 0"
