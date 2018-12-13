@@ -1,0 +1,27 @@
+- name: "get current value for {{ option }}"
+  become: true
+  become_user: "{{ dataverse.glassfish.user }}"
+  shell: "{{ dataverse.glassfish.root }}/bin/asadmin list-jvm-options | egrep '{{ option }}'"
+  register: current_value
+  failed_when: false
+  changed_when: false
+
+- name: "unset old value for {{ option }}"
+  become_user: "{{ dataverse.glassfish.user }}"
+  shell: "{{ dataverse.glassfish.root }}/bin/asadmin delete-jvm-options '{{ current_value.stdout_lines | join(':') }}'"
+  register: unset
+  failed_when: "'delete-jvm-options executed successfully' not in unset.stdout"
+  when: "('{{ option }}' in current_value.stdout and '{{ value }}' not in current_value.stdout) or ('{{ value }}' == '')"
+
+- name: "set new value for {{ option }}"
+  become_user: "{{ dataverse.glassfish.user }}"
+  shell: "{{ dataverse.glassfish.root }}/bin/asadmin create-jvm-options '-D{{ option }}={{ value }}'"
+  when: value != '' and '{{ value }}' not in current_value.stdout
+
+- name: "confirm value for {{ option }}"
+  become: true
+  become_user: "{{ dataverse.glassfish.user }}"
+  shell: "{{ dataverse.glassfish.root }}/bin/asadmin list-jvm-options | egrep '{{ option }}'"
+  register: new_value
+  failed_when: "('{{ value }}' != '' and '{{ value }}' not in new_value.stdout) or ('{{ value }}' == '' and new_value.stdout != '')"
+  changed_when: false
