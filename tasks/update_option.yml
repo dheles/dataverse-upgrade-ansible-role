@@ -1,3 +1,7 @@
+# NOTE: while glassfish supports multiple occurances of a given option with different values,
+# this task can currently handle only one occurance of an option. this is due to the need to escape colons in values (like urls)
+# in conjunction with the fact that deleting multiple values is accomplished by concatenating them with a colon. a workaround may be possible,
+# but as we don't actually need this capability at present, i'm disinclined to invest more time on it now.
 - name: "get current value for {{ option }}"
   become: true
   become_user: "{{ dataverse.glassfish.user }}"
@@ -5,18 +9,21 @@
   register: current_value
   failed_when: false
   changed_when: false
+  no_log: "{{ not dvu_debugging }}"
 
 - name: "unset old value for {{ option }}"
   become_user: "{{ dataverse.glassfish.user }}"
-  shell: "{{ dataverse.glassfish.root }}/bin/asadmin delete-jvm-options '{{ current_value.stdout_lines | join(':') }}'"
+  shell: "{{ dataverse.glassfish.root }}/bin/asadmin delete-jvm-options '{{ current_value.stdout_lines[0] | replace(':','\\:') }}'"
   register: unset
   failed_when: "'delete-jvm-options executed successfully' not in unset.stdout"
   when: "('{{ option }}' in current_value.stdout and '{{ value }}' not in current_value.stdout) or ('{{ value }}' == '')"
+  no_log: "{{ not dvu_debugging }}"
 
 - name: "set new value for {{ option }}"
   become_user: "{{ dataverse.glassfish.user }}"
-  shell: "{{ dataverse.glassfish.root }}/bin/asadmin create-jvm-options '-D{{ option }}={{ value }}'"
+  shell: "{{ dataverse.glassfish.root }}/bin/asadmin create-jvm-options '-D{{ option }}={{ value | replace(':','\\:') }}'"
   when: value != '' and '{{ value }}' not in current_value.stdout
+  no_log: "{{ not dvu_debugging }}"
 
 - name: "confirm value for {{ option }}"
   become: true
@@ -25,3 +32,4 @@
   register: new_value
   failed_when: "('{{ value }}' != '' and '{{ value }}' not in new_value.stdout) or ('{{ value }}' == '' and new_value.stdout != '')"
   changed_when: false
+  no_log: "{{ not dvu_debugging }}"
