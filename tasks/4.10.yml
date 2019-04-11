@@ -1,0 +1,15 @@
+---
+- name: wait for api before using
+  wait_for:
+    port: "{{ dvu_api_port }}"
+
+# curl -X GET http://localhost:8080/api/admin/datafiles/integrity/fixmissingoriginalsizes
+- name: Retroactively store original file size
+  uri:
+    url: "{{ dvu_api_location }}/admin/datafiles/integrity/fixmissingoriginalsizes"
+    method: GET
+
+- name: Run ReExportall to generate JSON-LD exports in the new format added in 4.10
+  command: "echo 'reexporting metadata to upgrade dataverse'"
+  changed_when: true
+  notify: reexport metadata
