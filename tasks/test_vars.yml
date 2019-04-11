@@ -1,0 +1,4 @@
+---
+- name: find needed version upgrades
+  debug:
+    msg: "combined: {{ dvu_versions | union(dvu_versions_extra) }}"
