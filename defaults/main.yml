@@ -70,6 +70,10 @@ dvu_versions:
 - version:            "4.11"
   queries:
   - "upgrade_v4.10.1_to_v4.11.sql"
+- version:            "4.12"
+  solr:
+  - file:     "schema.xml"
+    checksum: "sha1:148e117759810798eab2b77a1b14e77567e6e67b"
 dvu_releases_url: "https://github.com/IQSS/dataverse/releases/download"
 dvu_working_dir:  "/home/{{ ansible_user }}"
 dvu_dbname:       "{{ dataverse.db.name }}"
