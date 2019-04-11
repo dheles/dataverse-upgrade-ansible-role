@@ -67,6 +67,9 @@ dvu_versions:
     checksum: "sha1:53c7efbf56b5968cfa86d8b1b8f312f79cc425b8"
   tasks:              true
 - version:            "4.10.1"
+- version:            "4.11"
+  queries:
+  - "upgrade_v4.10.1_to_v4.11.sql"
 dvu_releases_url: "https://github.com/IQSS/dataverse/releases/download"
 dvu_working_dir:  "/home/{{ ansible_user }}"
 dvu_dbname:       "{{ dataverse.db.name }}"
