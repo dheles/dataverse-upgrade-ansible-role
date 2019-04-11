@@ -31,3 +31,11 @@
   uri:
     url: "{{ dvu_api_location }}/admin/metadata/reExportAll"
     status_code: 200, 202
+
+- name: restart glassfish
+  become: true
+  systemd:
+    name: glassfish
+    state: restarted
+    daemon_reload: yes
+  listen: restart glassfish service
