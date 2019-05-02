@@ -74,6 +74,7 @@ dvu_versions:
   solr:
   - file:     "schema.xml"
     checksum: "sha1:148e117759810798eab2b77a1b14e77567e6e67b"
+- version:            "4.13"
 dvu_releases_url: "https://github.com/IQSS/dataverse/releases/download"
 dvu_working_dir:  "/home/{{ ansible_user }}"
 dvu_dbname:       "{{ dataverse.db.name }}"
